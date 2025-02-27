@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Humocripto - Vos fumá!</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.7.32/sweetalert2.min.css">
+</head>
+<body>
+    <div class="legal-notice">
+        <div class="legal-notice-content">
+            <strong>Importante: </strong>· Los datos proporcionados tienen únicamente fines educativos e informativos. ·
+            No deben interpretarse como asesoramiento financiero o recomendación de inversión. ·
+            Cada persona es responsable del uso que haga de esta información y debe hacerse cargo de sus propias decisiones.    
+        </div>
+    </div>
+    <div class="header">
+        <div class="header-content">
+            <div class="logo-container">
+                <div class="app-logo-container">
+                    <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="app-logo">
+                </div>
+                <div class="title-container">
+                    <h1 class="main-title">Humocripto</h1>
+                    <h2>Predicciones de trading en spot a 7 días</h2>
+                    <p>Análisis técnico e informe de contexto, con datos de Kucoin</p>
+                </div>
+            </div>
+            <p class="brand-signature">por 👽 nesval · © 2025 🐧</p>
+        </div>
+    </div>
+    <main class="container py-4">
+        <div class="row mb-4">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <div id="processing-card" class="processing-card d-none">
+                            <div class="card-body">
+                                <div class="processing-content">
+                                    <div class="crypto-neural-loader">
+                                        <div class="neural-path"></div>
+                                        <div class="crypto-coin btc-symbol">₿</div>
+                                        <div class="neural-node eth-symbol">Ξ</div>
+                                        <div class="crypto-coin sol-symbol">◎</div>
+                                        <div class="neural-node dot-symbol">Φ</div>
+                                        <div class="crypto-coin peso-symbol">$</div>
+                                        <div class="neural-node alien-symbol">👽</div>
+                                        <div class="crypto-coin penguin-symbol">🐧</div>
+                                        <div class="neural-node star-symbol">⭐</div>
+                                        <div class="crypto-coin rocket-symbol">🚀</div>
+                                    </div>
+                                    <h3 class="processing-text">Procesando datos...</h3>
+                                    <p class="processing-subtext">Analizando patrones en el mercado</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-7">
+                                <p class="card-text mb-3">
+                                    <span class="humocripto-highlight">Humocripto</span> analiza velas de una hora (a lo largo del último año) para predecir precios
+                                </p>
+                                <div class="usage-steps">
+                                    <div class="usage-step" data-step="1">
+                                        <div class="usage-step-content">
+                                            <span class="step-text">Entrená el modelo antes de realizar predicciones.</span>
+                                            <button id="trainBtn" class="btn btn-primary">Entrenar Modelo</button>
+                                        </div>
+                                    </div>
+                                    <div class="usage-step" data-step="2">
+                                        <div class="usage-step-content">
+                                            <span class="step-text">Buscá señales de compra o venta.</span>
+                                            <button id="predictBtn" class="btn btn-success">Obtener Señales</button>
+                                        </div>
+                                    </div>
+                                    <div class="usage-step" data-step="3">
+                                        <div class="usage-step-content">
+                                            <span class="step-text">Consultá el análisis de contexto del mercado.</span>
+                                            <a href="javascript:void(0);" class="btn btn-info context-link" onclick="
+                                                if (!sessionStorage.getItem('trainCompleted') || !sessionStorage.getItem('predictCompleted')) {
+                                                    Swal.fire({
+                                                        title: '¡Hey! 😊',
+                                                        html: 'Tenés que ir por partes, ¡como dijo Jack!<br>Primero hay que entrenar el modelo y obtener señales antes de ver el informe de contexto. ❤️',
+                                                        icon: 'warning',
+                                                        confirmButtonText: 'Entendido',
+                                                        confirmButtonColor: '#4c51bf',
+                                                        background: '#0a0c0f',
+                                                        color: '#ffffff',
+                                                        showClass: {
+                                                            popup: 'animate__animated animate__fadeInDown'
+                                                        },
+                                                        hideClass: {
+                                                            popup: 'animate__animated animate__fadeOutUp'
+                                                        }
+                                                    });
+                                                    return false;
+                                                }
+                                                document.getElementById('context-section').scrollIntoView({ behavior: 'smooth' });
+                                                return false;
+                                            ">
+                                                Ver informe de contexto
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="usage-step" data-step="4">
+                                        <div class="usage-step-content">
+                                            <span class="step-text">Mirá las últimas noticias.</span>
+                                            <a href="javascript:void(0);" class="btn btn-warning news-link" onclick="
+                                                if (!sessionStorage.getItem('trainCompleted') || !sessionStorage.getItem('predictCompleted')) {
+                                                    Swal.fire({
+                                                        title: '¡Hey! 😊',
+                                                        html: 'Tenés que ir por partes, ¡como dijo Jack!<br>Primero hay que entrenar el modelo y obtener señales antes de ver las criptonoticias. ❤️',
+                                                        icon: 'warning',
+                                                        confirmButtonText: 'Entendido',
+                                                        confirmButtonColor: '#4c51bf',
+                                                        background: '#0a0c0f',
+                                                        color: '#ffffff',
+                                                        showClass: {
+                                                            popup: 'animate__animated animate__fadeInDown'
+                                                        },
+                                                        hideClass: {
+                                                            popup: 'animate__animated animate__fadeOutUp'
+                                                        }
+                                                    });
+                                                    return false;
+                                                }
+                                                document.getElementById('news-section').scrollIntoView({ behavior: 'smooth' });
+                                                return false;
+                                            ">
+                                                Criptonoticias
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Espacio reservado para contenido adicional si es necesario -->
+                            </div>
+                            <div class="col-md-5">
+                                <h5 class="text-accent-cyan mb-3">Tokens analizados</h5>
+                                <div class="token-list-container">
+                                    <div class="token-list">
+                                        <div class="token-item primary">BTC</div>
+                                        <div class="token-item primary">ETH</div>
+                                        <div class="token-item primary">BNB</div>
+                                        <div class="token-item primary">SOL</div>
+                                        <div class="token-item primary">XRP</div>
+                                        <div class="token-item primary">LTC</div>
+                                        <div class="token-item enhanced">BCH</div>
+                                        <div class="token-item enhanced">TRX</div>
+                                        <div class="token-item enhanced">XLM</div>
+                                        <div class="token-item enhanced">ALGO</div>
+                                        <div class="token-item enhanced">FLUX</div>
+                                        <div class="token-item enhanced">THETA</div>
+                                        <div class="token-item enhanced">TFUEL</div>
+                                        <div class="token-item enhanced">POL</div>
+                                        <div class="token-item enhanced">LAI</div>
+                                        <div class="token-item enhanced">WILD</div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Bloque unificado de información de predicción - Rediseñado para coincidir con imagen -->
+                                <div id="unified-meta-info" class="prediction-meta-info shared-meta-info mt-4 d-none">
+                                    <h4 class="meta-title">Momento de la predicción</h4>
+                                    <div class="metadata-grid">
+                                        <div class="meta-item">
+                                            <span class="prediction-meta-label">Fecha:</span>
+                                            <span id="prediction-time" class="prediction-meta-value">-</span>
+                                        </div>
+                                        <div class="meta-item">
+                                            <span class="prediction-meta-label">Zona horaria:</span>
+                                            <span class="prediction-meta-value">Buenos Aires</span>
+                                        </div>
+                                        <div class="meta-item">
+                                            <span class="prediction-meta-label">Objetivo:</span>
+                                            <span class="prediction-meta-value">Operatoria en Spot</span>
+                                        </div>
+                                        <div class="meta-item">
+                                            <span class="prediction-meta-label">Horizonte:</span>
+                                            <span class="prediction-meta-value">7 días</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="status" class="alert alert-info d-none" role="alert"></div>
+
+        <div id="signals" class="row d-none">
+            <div class="col-12">
+                <h2 class="text-success">Posibilidad de Compra</h2>
+                <div id="compra-signals" class="row"></div>
+            </div>
+            <div class="col-12 mt-5">
+                <h2 class="text-danger">Sugerencia de Venta</h2>
+                <div id="venta-signals" class="row"></div>
+            </div>
+        </div>
+
+        <!-- NUEVA SECCIÓN PARA EL CONTEXTO -->
+       <div id="context-section" class="row d-none">
+           <div class="col-12">
+               <h2>Criptomercado actual: informe de contexto</h2>
+               <div class="card">
+                   <div class="card-body">
+                       <!-- Primera fila: Gráfico en toda la anchura -->
+                       <div class="row mb-4">
+                           <div class="col-md-6 mx-auto">
+                               <div class="fear-greed-container mb-3">
+                                   <h4 class="text-center mb-3">Índice de Miedo y Codicia</h4>
+                                   <div class="fear-greed-wrapper">
+                                       <div class="fear-greed-scale">
+                                           <div class="scale-label top">100</div>
+                                           <div class="scale-label middle">50</div>
+                                           <div class="scale-label bottom">0</div>
+                                       </div>
+                                       <div id="fear-greed-chart" class="fear-greed-semaphore mb-2">
+                                           <!-- Aquí se insertará el semáforo del índice de miedo y codicia -->
+                                       </div>
+                                       <div class="scale-labels">
+                                           <div class="scale-text top">Codicia Extrema</div>
+                                           <div class="scale-text middle">Neutral</div>
+                                           <div class="scale-text bottom">Miedo Extremo</div>
+                                       </div>
+                                   </div>
+                                   <div id="fear-greed-value" class="text-center mt-2">
+                                       <!-- Aquí se insertará el valor numérico -->
+                                   </div>
+                               </div>
+                           </div>
+                       </div>
+                       
+                       <!-- Segunda fila: Informe completo en toda la anchura -->
+                       <div class="row">
+                           <div class="col-12">
+                               <div id="context-report" class="context-report-container">
+                                   <!-- Aquí se insertará el informe del LLM -->
+                               </div>
+                           </div>
+                       </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- NUEVA SECCIÓN PARA CRIPTONOTICIAS -->
+        <div id="news-section" class="row d-none">
+            <div class="col-12">
+                <h2>Criptonoticias</h2>
+                <div class="card">
+                    <div class="card-body">
+                        <div id="crypto-news-container" class="crypto-news-container">
+                            <!-- Aquí se insertarán las noticias de CryptoPanic -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.7.32/sweetalert2.min.js"></script>
+    <script>
+        // Función para verificar la secuencia de pasos
+        // Esta función ya no se utiliza, la dejamos por compatibilidad pero implementamos
+        // la lógica directamente en cada event listener para mayor claridad
+        function checkSequence(step) {
+                    const trainStatus = sessionStorage.getItem('trainCompleted') === 'true';
+                    const predictStatus = sessionStorage.getItem('predictCompleted') === 'true';
+                    
+                    if (step === 2 && !trainStatus) {
+                        Swal.fire({
+                            title: '¡Hey! 😊',
+                            html: 'Hay que ir por partes, ¡como dijo Jack!<br>Primero hay que entrenar el modelo antes de obtener señales. ❤️',
+                            icon: 'warning',
+                            confirmButtonText: 'Entendido',
+                            confirmButtonColor: '#4c51bf',
+                            background: '#0a0c0f',
+                            color: '#ffffff',
+                            showClass: {
+                                popup: 'animate__animated animate__fadeInDown'
+                            },
+                            hideClass: {
+                                popup: 'animate__animated animate__fadeOutUp'
+                            }
+                        });
+                        return false;
+                    } else if (step === 3 && (!trainStatus || !predictStatus)) {
+                        Swal.fire({
+                            title: '¡Hey! 😊',
+                            html: 'Hay que ir por partes, ¡como dijo Jack!<br>Primero hay que entrenar el modelo y obtener señales antes de ver el informe de contexto. ❤️',
+                            icon: 'warning',
+                            confirmButtonText: 'Entendido',
+                            confirmButtonColor: '#4c51bf',
+                            background: '#0a0c0f',
+                            color: '#ffffff',
+                            showClass: {
+                                popup: 'animate__animated animate__fadeInDown'
+                            },
+                            hideClass: {
+                                popup: 'animate__animated animate__fadeOutUp'
+                            }
+                        });
+                        return false;
+                    }
+                    return true;
+                }
+
+        document.getElementById('trainBtn').addEventListener('click', async () => {
+            // Reiniciar el estado al comenzar el entrenamiento
+            sessionStorage.clear();
+            const status = document.getElementById('status');
+            const processingCard = document.getElementById('processing-card');
+            
+            // Mostrar estado y ventana de procesamiento
+            status.textContent = 'Entrenando modelo...';
+            status.classList.remove('d-none', 'alert-danger');
+            status.classList.add('alert-info');
+            processingCard.classList.remove('d-none');
+            document.querySelector('.processing-text').textContent = 'Entrenando modelo...';
+            document.querySelector('.processing-subtext').textContent = 'Analizando datos históricos';
+
+            try {
+                const response = await fetch('/api/train', { method: 'POST' });
+                const data = await response.json();
+                
+                // Ocultar ventana de procesamiento
+                processingCard.classList.add('d-none');
+                
+                if (data.status === 'error') {
+                    status.classList.remove('alert-info');
+                    status.classList.add('alert-danger');
+                    status.textContent = data.message;
+                } else {
+                    // Marcar el entrenamiento como completado
+                    sessionStorage.setItem('trainCompleted', 'true');
+                    status.textContent = data.message;
+                    
+                    // Mostrar mensaje de confirmación
+                    Swal.fire({
+                        title: '¡Procesamiento completado!',
+                        text: 'Seguí con el paso siguiente',
+                        icon: 'success',
+                        timer: 3000,
+                        timerProgressBar: true,
+                        showConfirmButton: false,
+                        background: '#0a0c0f',
+                        color: '#ffffff'
+                    });
+                }
+            } catch (error) {
+                processingCard.classList.add('d-none');
+                console.error('Error:', error);
+                showError('Error al entrenar el modelo');
+            }
+        });
+document.getElementById('predictBtn').addEventListener('click', async () => {
+    // Verificar la secuencia antes de continuar
+    if (!sessionStorage.getItem('trainCompleted')) {
+        Swal.fire({
+            title: '¡Hey! 😊',
+            html: 'Tenés que ir por partes, ¡como dijo Jack!<br>Primero hay que entrenar el modelo antes de obtener señales. ❤️',
+            icon: 'warning',
+            confirmButtonText: 'Entendido',
+            confirmButtonColor: '#4c51bf',
+            background: '#0a0c0f',
+            color: '#ffffff',
+            showClass: {
+                popup: 'animate__animated animate__fadeInDown'
+            },
+            hideClass: {
+                popup: 'animate__animated animate__fadeOutUp'
+            }
+        });
+        return;
+    }
+    
+            
+            const status = document.getElementById('status');
+            const signals = document.getElementById('signals');
+            const processingCard = document.getElementById('processing-card');
+            
+            // Mostrar estado y ventana de procesamiento
+            status.textContent = 'Obteniendo señales...';
+            status.classList.remove('d-none', 'alert-danger');
+            status.classList.add('alert-info');
+            signals.classList.add('d-none');
+            processingCard.classList.remove('d-none');
+            document.querySelector('.processing-text').textContent = 'Buscando señales...';
+            document.querySelector('.processing-subtext').textContent = 'Analizando patrones de mercado';
+
+            try {
+                const response = await fetch('/api/predict');
+                const data = await response.json();
+
+                if (!data || !data.predicciones) {
+                    throw new Error('Formato de respuesta inválido');
+                }
+
+                if (data.status === 'success') {
+                    // Añadir logging para depuración
+                    console.log("Datos recibidos de la API:", data);
+                    
+                    // Verificar estructura de predicciones
+                    if (data.predicciones && data.predicciones.compra && data.predicciones.venta) {
+                        console.log("Estructura de compra:", data.predicciones.compra);
+                        console.log("Estructura de venta:", data.predicciones.venta);
+                    } else {
+                        console.error("Estructura de predicciones incorrecta:", data.predicciones);
+                    }
+                    
+                    // Verificar estructura de contexto
+                    if (data.contexto) {
+                        console.log("Datos de contexto:", data.contexto);
+                    }
+                    
+                    // Ocultar ventana de procesamiento antes de mostrar los resultados
+                    processingCard.classList.add('d-none');
+                    
+                    // Procesar y formatear el texto del informe antes de mostrarlo
+                    if (data.contexto && data.contexto.informe) {
+                        const informe = data.contexto.informe;
+                        
+                        // Buscar secciones con formato $[Título]$
+                        const sectionRegex = /\$\[(.*?)\]\$([\s\S]*?)(?=\$\[|$)/g;
+                        let match;
+                        let formattedReport = '';
+                        
+                        let index = 1;
+                        while ((match = sectionRegex.exec(informe)) !== null) {
+                            const title = match[1];
+                            const content = match[2].trim();
+                            
+                            // Procesar el contenido para eliminar asteriscos y mejorar formato
+                            let processedContent = content;
+                            
+                            // Reemplazar asteriscos con elementos HTML para mejor formato
+                            processedContent = processedContent.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                            processedContent = processedContent.replace(/\*(.*?)\*/g, '<em>$1</em>');
+                            
+                            // Separar párrafos con saltos de línea
+                            processedContent = processedContent.split('\n').map(p => {
+                                // Si el párrafo comienza con un asterisco, convertirlo en un elemento de lista
+                                if (p.trim().startsWith('*')) {
+                                    return `<div class="report-bullet">${p.trim().substring(1)}</div>`;
+                                }
+                                return `<p>${p}</p>`;
+                            }).join('');
+                            
+                            formattedReport += `<div class="report-point"><strong class="report-title">${index}. ${title}</strong>`;
+                            formattedReport += `<div class="report-content-inner">${processedContent}</div>`;
+                            formattedReport += '</div>';
+                            
+                            index++;
+                        }
+                        
+                        // Si no se encontraron secciones con el formato esperado, usar el formato anterior
+                        if (formattedReport === '') {
+                            const parrafos = informe.split('\n\n').filter(p => p.trim() !== '');
+                            
+                            parrafos.forEach((parrafo, index) => {
+                                // Si el párrafo no comienza con un número, añadimos uno
+                                if (!/^\d+\./.test(parrafo)) {
+                                    parrafo = `${index + 1}. ${parrafo}`;
+                                }
+                                
+                                formattedReport += `<div class="report-point"><strong class="report-title">${parrafo.split(':')[0]}</strong>`;
+                                
+                                if (parrafo.includes(':')) {
+                                    formattedReport += parrafo.substring(parrafo.indexOf(':') + 1);
+                                } else {
+                                    // Si no hay dos puntos, añadimos el resto del párrafo
+                                    const firstSpace = parrafo.indexOf(' ');
+                                    if (firstSpace !== -1) {
+                                        formattedReport += parrafo.substring(firstSpace);
+                                    }
+                                }
+                                
+                                formattedReport += '</div>';
+                            });
+                        }
+                        
+                        data.formattedReport = formattedReport;
+                    }
+                    
+                    // Obtener y mostrar las noticias de CryptoPanic
+                    if (data.contexto && data.contexto.noticias) {
+                        const newsContainer = document.getElementById('crypto-news-container');
+                        newsContainer.innerHTML = '';
+                        
+                        data.contexto.noticias.forEach(news => {
+                            const newsDate = new Date(news.published_at);
+                            const formattedDate = newsDate.toLocaleDateString('es-AR', {
+                                day: '2-digit',
+                                month: '2-digit',
+                                year: 'numeric',
+                                hour: '2-digit',
+                                minute: '2-digit'
+                            });
+                            
+                            const newsItem = document.createElement('div');
+                            newsItem.className = 'news-item animate__animated animate__fadeInUp';
+                            
+                            // Usar el título traducido
+                            let newsContent = `<h3 class="news-title">${news.title}</h3>`;
+                            
+                            // Agregar resumen generado por el LLM si existe
+                            if (news.summary) {
+                                newsContent += `<p class="news-description">${news.summary}</p>`;
+                            }
+                            // Ya no usamos la descripción traducida porque ahora el LLM hace todo el trabajo
+                            
+                            // Agregar solo metadatos (sin enlace al artículo original)
+                            newsContent += `
+                                <div class="news-meta">
+                                    <div class="news-source">
+                                        <span class="news-source-icon">${news.source.charAt(0)}</span>
+                                        <span>${news.source}</span>
+                                    </div>
+                                    <span class="news-date">${formattedDate}</span>
+                                </div>
+                            `;
+                            
+                            newsItem.innerHTML = newsContent;
+                            
+                            newsContainer.appendChild(newsItem);
+                        });
+                        
+                        // Mostrar la sección de noticias
+                        document.getElementById('news-section').classList.remove('d-none');
+                    }
+                    
+                    displaySignals(data);
+                    status.classList.add('d-none');
+                    signals.classList.remove('d-none');
+                    // Marcar la predicción como completada
+                    sessionStorage.setItem('predictCompleted', 'true');
+                    
+                    // Mostrar mensaje de confirmación
+                    Swal.fire({
+                        title: '¡Procesamiento completado!',
+                        text: 'Seguí con el paso siguiente',
+                        icon: 'success',
+                        timer: 3000,
+                        timerProgressBar: true,
+                        showConfirmButton: false,
+                        background: '#0a0c0f',
+                        color: '#ffffff'
+                    });
+                } else {
+                    showError(data.message || 'Error al obtener señales');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                // Ocultar ventana de procesamiento en caso de error
+                processingCard.classList.add('d-none');
+                showError(error.message || 'Error al obtener señales');
+            }
+        });
+
+        function displaySignals(data) {
+            const compraContainer = document.getElementById('compra-signals');
+            const ventaContainer = document.getElementById('venta-signals');
+            const predictionTime = document.getElementById('prediction-time');
+
+            // ---  AÑADIMOS ESTO  ---
+            const contextSection = document.getElementById('context-section');
+            const contextReportDiv = document.getElementById('context-report');
+            const fearGreedChartDiv = document.getElementById('fear-greed-chart'); // Para el gráfico (opcional)
+
+            compraContainer.innerHTML = '';
+            ventaContainer.innerHTML = '';
+            
+            // Actualizar el momento de predicción
+            if (data.momento_prediccion) {
+                predictionTime.textContent = data.momento_prediccion;
+                
+                // Mostrar sección unificada de metadatos
+                document.getElementById('unified-meta-info').classList.remove('d-none');
+            } else {
+                // Ocultar sección si no hay datos
+                document.getElementById('unified-meta-info').classList.add('d-none');
+            }
+
+            // ---  AÑADIMOS ESTO  ---
+            // Manejo mejorado del análisis de contexto
+            if (data.contexto) {
+                // Mostrar sección de contexto
+                contextSection.classList.remove('d-none');
+                
+                // Mostrar informe si está disponible
+                if (data.contexto.informe) {
+                    // Usar el informe formateado que ya procesamos
+                    if (data.formattedReport) {
+                        contextReportDiv.innerHTML = `<div class="report-content">${data.formattedReport}</div>`;
+                    } else {
+                        // Si por alguna razón no se procesó el informe, mostrar mensaje de error
+                        contextReportDiv.innerHTML = `<div class="alert alert-warning">El informe no pudo ser formateado correctamente.</div>`;
+                    }
+                } else {
+                    contextReportDiv.textContent = "No se pudo obtener el informe de contexto.";
+                }
+                
+                // Mostrar medidor de miedo y codicia
+                if (data.contexto.indice_miedo_codicia) {
+                    const fearGreedValue = data.contexto.indice_miedo_codicia.value;
+                    const fearGreedClass = data.contexto.indice_miedo_codicia.value_classification;
+                    
+                    // Calcular ángulo para la aguja del medidor (0-180 grados)
+                    const angle = (fearGreedValue / 100) * 180;
+                    
+                    // Determinar clase CSS basada en la clasificación
+                    let cssClass = '';
+                    if (fearGreedClass.includes('Miedo Extremo')) cssClass = 'miedo-extremo';
+                    else if (fearGreedClass.includes('Miedo')) cssClass = 'miedo';
+                    else if (fearGreedClass.includes('Neutral')) cssClass = 'neutral';
+                    else if (fearGreedClass.includes('Codicia Extrema')) cssClass = 'codicia-extrema';
+                    else if (fearGreedClass.includes('Codicia')) cssClass = 'codicia';
+                    
+                    // Calcular la posición del indicador en el semáforo vertical (280px de altura - actualizado)
+                    // Invertir el valor para que 100 esté arriba y 0 abajo
+                    const position = 280 - ((fearGreedValue / 100) * 280);
+                    
+                    // Actualizar el semáforo vertical con el indicador en la posición correcta
+                    fearGreedChartDiv.innerHTML = `
+                        <div class="fear-greed-indicator" style="top: ${position}px;"></div>
+                    `;
+                    
+                    // Actualizar el valor numérico con estilo
+                    document.getElementById('fear-greed-value').innerHTML = `
+                        <div class="fear-greed-value">${fearGreedValue}</div>
+                        <div class="fear-greed-label ${cssClass}">${fearGreedClass}</div>
+                    `;
+                }
+            } else {
+                // No hay datos de contexto disponibles
+                contextReportDiv.textContent = "No se pudo obtener el informe de contexto.";
+                contextSection.classList.remove('d-none'); // Mostrar aunque haya error
+            }
+
+            // ---  (El resto de tu función displaySignals original) ---
+            function createCategorySection(container, category, title, categoryData) {
+               // Se ha modificado para trabajar con la estructura de datos actual
+               if (!categoryData || !Array.isArray(categoryData)) return;
+   
+               const categoryClass = category.key === 'alta_probabilidad' ? 'alta-probabilidad' :
+                                   category.key === 'probabilidad_media' ? 'probabilidad-media' :
+                                   category.key === 'baja_probabilidad' ? 'baja-probabilidad' : 'sin-tendencia';
+   
+               const categoryHeader = document.createElement('div');
+               categoryHeader.className = `category-header ${categoryClass}`;
+               categoryHeader.innerHTML = `
+                   <h3 class="h5 mb-0">${title}</h3>
+                   <small>${category.key === 'sin_tendencia' ? 'Sin tendencia clara identificada' : `Predicciones con ${title.toLowerCase()}`}</small>
+               `;
+               container.appendChild(categoryHeader);
+   
+               const row = document.createElement('div');
+               row.className = 'row';
+               // Añadir depuración para ver estructura de datos reales
+               console.log(`Categoría ${category.key} - Datos:`, categoryData);
+               
+               categoryData.forEach(signal => {
+                   if (!signal || !signal.señales || !signal.señales.qlib) {
+                       console.log(`Señal inválida detectada:`, signal);
+                       return;
+                   }
+   
+                   const qlib = signal.señales.qlib;
+                const isCompra = qlib.accion === 'COMPRA';
+                const accionClass = isCompra ? 'compra' : 'venta';
+                const accionColor = isCompra ? 'text-success' : 'text-danger';
+                const icon = isCompra ? '↑' : '↓';
+
+                const card = document.createElement('div');
+                card.className = 'col-md-4 mt-3 animate__animated animate__fadeInUp'; // Animación
+                card.innerHTML = `
+                    <div class="card signal-card ${accionClass}">
+                        <div class="card-body">
+                            <h5 class="card-title">${signal.symbol}</h5>
+                            <div class="prediction-info ${accionClass}">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="${accionColor} fw-bold">${qlib.accion}</span>
+                                    <span class="expected-return ${accionColor}">${icon} ${qlib.rentabilidad_esperada}</span>
+                                </div>
+                                <p class="mb-2">${qlib.explicacion}</p>
+                                <div class="price-info">
+                                    <div class="d-flex justify-content-between mb-1">
+                                        <span>Precio actual:</span>
+                                        <span class="fw-bold">$${qlib.precio_actual}</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <span>Precio objetivo:</span>
+                                        <span class="fw-bold">$${qlib.precio_objetivo}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                row.appendChild(card);
+            });
+            container.appendChild(row);
+        }
+
+
+        // ---  (resto de tu código) ---
+
+            const categories = [
+                { key: 'alta_probabilidad', title: 'Alta Probabilidad' },
+                { key: 'probabilidad_media', title: 'Probabilidad Media' },
+                { key: 'baja_probabilidad', title: 'Baja Probabilidad' },
+                { key: 'sin_tendencia', title: 'Sin Tendencia Clara' }
+            ];
+
+            categories.forEach(category => {
+                if (data.predicciones.compra && data.predicciones.compra[category.key] &&
+                    Array.isArray(data.predicciones.compra[category.key]) &&
+                    data.predicciones.compra[category.key].length > 0) {
+                    createCategorySection(compraContainer, category, category.title, data.predicciones.compra[category.key]);
+                }
+                if (data.predicciones.venta && data.predicciones.venta[category.key] &&
+                    Array.isArray(data.predicciones.venta[category.key]) &&
+                    data.predicciones.venta[category.key].length > 0) {
+                    createCategorySection(ventaContainer, category, category.title, data.predicciones.venta[category.key]);
+                }
+            });
+            
+            // Verificar si no hay resultados en ninguna categoría
+            if (compraContainer.children.length === 0) {
+                compraContainer.innerHTML = '<div class="alert alert-info">No hay señales de compra en este momento.</div>';
+            }
+            if (ventaContainer.children.length === 0) {
+                ventaContainer.innerHTML = '<div class="alert alert-info">No hay señales de venta en este momento.</div>';
+            }
+
+        }
+
+        function showError(message) {
+            const status = document.getElementById('status');
+            const signals = document.getElementById('signals');
+            const contextSection = document.getElementById('context-section');
+            const newsSection = document.getElementById('news-section');
+
+            status.textContent = message;
+            status.classList.remove('d-none', 'alert-info');
+            status.classList.add('alert-danger');
+            signals.classList.add('d-none');
+            contextSection.classList.add('d-none'); // Ocultar también el contexto
+            newsSection.classList.add('d-none'); // Ocultar también las noticias
+        }
+
+
+        // ---  AÑADE ESTA FUNCIÓN  ---
+        function getColorForFearGreed(value) {
+            if (value <= 25) return '#e74c3c'; // Rojo (Miedo Extremo)
+            if (value <= 45) return '#e67e22'; // Naranja (Miedo)
+            if (value <= 55) return '#f1c40f'; // Amarillo (Neutral)
+            if (value <= 75) return '#2ecc71'; // Verde Claro (Codicia)
+            return '#27ae60'; // Verde Oscuro (Codicia Extrema)
+        }
+
+        // Función para mostrar mensaje de error de secuencia
+        function showSequenceError(message) {
+            Swal.fire({
+                title: '¡Hey! 😊',
+                html: message,
+                icon: 'warning',
+                confirmButtonText: 'Entendido',
+                confirmButtonColor: '#4c51bf',
+                background: '#0a0c0f',
+                color: '#ffffff',
+                showClass: {
+                    popup: 'animate__animated animate__fadeInDown'
+                },
+                hideClass: {
+                    popup: 'animate__animated animate__fadeOutUp'
+                }
+            });
+            return false; // Importante: detiene la navegación
+        }
+
+        // Función para verificar la secuencia del contexto
+        function checkContextSequence() {
+            console.log("Verificando secuencia para contexto");
+            if (!sessionStorage.getItem('trainCompleted') || !sessionStorage.getItem('predictCompleted')) {
+                Swal.fire({
+                    title: '¡Hey! 😊',
+                    html: 'Tenés que ir por partes, ¡como dijo Jack!<br>Primero hay que entrenar el modelo y obtener señales antes de ver el informe de contexto. ❤️',
+                    icon: 'warning',
+                    confirmButtonText: 'Entendido',
+                    confirmButtonColor: '#4c51bf',
+                    background: '#0a0c0f',
+                    color: '#ffffff',
+                    showClass: {
+                        popup: 'animate__animated animate__fadeInDown'
+                    },
+                    hideClass: {
+                        popup: 'animate__animated animate__fadeOutUp'
+                    }
+                });
+                return false;
+            }
+            document.getElementById('context-section').scrollIntoView({ behavior: 'smooth' });
+            return false;
+        }
+
+        // Función para verificar la secuencia de noticias
+        function checkNewsSequence() {
+            console.log("Verificando secuencia para noticias");
+            if (!sessionStorage.getItem('trainCompleted') || !sessionStorage.getItem('predictCompleted')) {
+                Swal.fire({
+                    title: '¡Hey! 😊',
+                    html: 'Tenés que ir por partes, ¡como dijo Jack!<br>Primero hay que entrenar el modelo y obtener señales antes de ver las criptonoticias. ❤️',
+                    icon: 'warning',
+                    confirmButtonText: 'Entendido',
+                    confirmButtonColor: '#4c51bf',
+                    background: '#0a0c0f',
+                    color: '#ffffff',
+                    showClass: {
+                        popup: 'animate__animated animate__fadeInDown'
+                    },
+                    hideClass: {
+                        popup: 'animate__animated animate__fadeOutUp'
+                    }
+                });
+                return false;
+            }
+            document.getElementById('news-section').scrollIntoView({ behavior: 'smooth' });
+            return false;
+        }
+
+        // Ya no necesitamos estos event listeners porque ahora usamos onclick directamente en los elementos
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
